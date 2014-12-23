@@ -15,49 +15,66 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:gravity="center_vertical|center_horizontal">
+        android:gravity="center_vertical|center_horizontal|bottom"
+        android:weightSum="1">
+
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/taxiPlate"
+            android:layout_gravity="center_horizontal"
+            android:background="#FFAA00"
+            android:layout_weight="0.10"
+            android:accessibilityLiveRegion="polite"
+            android:hint="PLACA DEL TAXI AQUÍ"
+            android:textColor="#ff000000"
+            android:gravity="center_vertical|center_horizontal"
+            android:textSize="20dp" />
 
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal">
+            android:layout_width="fill_parent"
+            android:layout_height="135dp"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/row1">
 
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="New Button"
-                android:id="@+id/button"
-                android:layout_weight="1" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:id="@+id/report_img1"
+                android:layout_weight="1"
+                android:src="@drawable/denunciar" />
 
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="New Button"
-                android:id="@+id/button2"
-                android:layout_weight="1" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:id="@+id/congrats_img2"
+                android:layout_weight="1"
+                android:src="@drawable/felicitar" />
+
         </LinearLayout>
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="135dp"
             android:layout_gravity="center_horizontal"
-            android:id="@+id/linearLayout" >
+            android:id="@+id/row2" >
 
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="New Button"
-                android:id="@+id/button3"
-                android:layout_weight="1" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:id="@+id/search_img3"
+                android:layout_weight="1"
+                android:src="@drawable/reputacion" />
 
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="New Button"
-                android:id="@+id/button4"
-                android:layout_weight="1" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:id="@+id/tips_img4"
+                android:layout_weight="1"
+                android:src="@drawable/tips" />
+
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

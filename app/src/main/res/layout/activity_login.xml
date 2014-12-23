@@ -104,7 +104,8 @@
                     android:layout_marginTop="16dp"
                     android:text="Ingresar"
                     android:textStyle="bold"
-                    android:textColor="#fff" />
+                    android:textColor="#fff"
+                    android:background="#FFAA00" />
 
                 <Button
                     android:id="@+id/email_sign_up_button"
