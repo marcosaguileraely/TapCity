@@ -3,20 +3,23 @@ package com.cool4code.tapcity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-
+import android.app.ActionBar;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.ContentResolver;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build.VERSION;
 import android.os.Build;
+import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,9 +29,15 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.SignInButton;
+import com.parse.LogInCallback;
+import com.parse.ParseException;
+import com.parse.ParseUser;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,35 +74,49 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
     private View mLoginFormView;
 
     Button  sign_up_button;
+    Button  sign_in_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // Find the Google+ sign in button.
-        //mPlusSignInButton = (SignInButton) findViewById(R.id.plus_sign_in_button);
-        sign_up_button    = (Button) findViewById(R.id.email_sign_up_button);
-        /*if (supportsGooglePlayServices()) {
-            // Set a listener to connect the user when the G+ button is clicked.
-            mPlusSignInButton.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    signIn();
-                }
-            });
+        ActionBar bar = getActionBar();
+        bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFAA00")));
+        int titleId;
+        int textColor = getResources().getColor(android.R.color.white);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            titleId = getResources().getIdentifier("action_bar_title", "id", "android");
+            TextView abTitle = (TextView) findViewById(titleId);
+            abTitle.setTextColor(textColor);
         } else {
-            // Don't offer G+ sign in if the app's version is too low to support Google Play
-            // Services.
-            mPlusSignInButton.setVisibility(View.GONE);
-            return;
-        }*/
+            TextView abTitle = (TextView) getWindow().findViewById(android.R.id.title);
+            abTitle.setTextColor(textColor);
+        }
 
-        // Set up the login form.
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        ParseUser pUser = ParseUser.getCurrentUser();
+        String objId    = pUser.getObjectId();
+        boolean isAuth  = pUser.isAuthenticated();
+
+        if( isAuth == true ){
+            Log.d("//auth", "user " + pUser);
+            Log.d("//auth", "id " + objId);
+            Log.d("//auth", "auth " + isAuth);
+            Log.d("//auth", "usuario autenticado");
+            Intent goToHome = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(goToHome);
+
+        }else{
+            Log.d("//auth", "usuario no autenticado");
+        }
+
+        sign_up_button = (Button) findViewById(R.id.email_sign_up_button);
+        sign_in_button = (Button) findViewById(R.id.email_sign_in_button);
+
+        mEmailView     = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
 
-        mPasswordView = (EditText) findViewById(R.id.password);
+        mPasswordView  = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -121,10 +144,32 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
             }
         });
 
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
-        mEmailLoginFormView = findViewById(R.id.email_login_form);
-        mSignOutButtons = findViewById(R.id.plus_sign_out_buttons);
+        sign_in_button.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String passtxt = mPasswordView.getText().toString();
+                String usertxt = mEmailView.getText().toString();
+                showProgress(true);
+                ParseUser.logInInBackground(usertxt, passtxt, new LogInCallback() {
+                    public void done(ParseUser parseUser, ParseException e) {
+                        if (parseUser != null) {
+                            Toast.makeText(getApplicationContext(), "Acceso exitoso a TapCity", Toast.LENGTH_LONG).show();
+                            Intent goToHome = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(goToHome);
+                            finish();
+                        } else {
+                            Log.d("Action", e.toString());
+                            Toast.makeText(getApplicationContext(), "Mensaje :"+e.toString() , Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+            }
+        });
+
+        mLoginFormView       = findViewById(R.id.login_form);
+        mProgressView        = findViewById(R.id.login_progress);
+        mEmailLoginFormView  = findViewById(R.id.email_login_form);
+        mSignOutButtons      = findViewById(R.id.plus_sign_out_buttons);
     }
 
     private void populateAutoComplete() {
@@ -136,7 +181,6 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
             new SetupEmailAutoCompleteTask().execute(null, null);
         }
     }
-
 
     /**
      * Attempts to sign in or register the account specified by the login form.
@@ -289,7 +333,7 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
      */
     private boolean supportsGooglePlayServices() {
         return GooglePlayServicesUtil.isGooglePlayServicesAvailable(this) ==
-                ConnectionResult.SUCCESS;
+               ConnectionResult.SUCCESS;
     }
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
