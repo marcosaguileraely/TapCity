@@ -29,7 +29,9 @@
             android:hint="PLACA DEL TAXI AQUÍ"
             android:textColor="#ff000000"
             android:gravity="center_vertical|center_horizontal"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            android:capitalize="characters"
+            android:textStyle="bold" />
 
         <LinearLayout
             android:orientation="horizontal"
