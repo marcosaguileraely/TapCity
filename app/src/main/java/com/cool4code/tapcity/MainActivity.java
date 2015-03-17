@@ -1,17 +1,26 @@
 package com.cool4code.tapcity;
 
 import android.app.ActionBar;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.os.StrictMode;
+import android.support.v7.app.ActionBarActivity;
+import android.text.InputFilter;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 
 public class MainActivity extends ActionBarActivity {
+    String PLATE;
+    EditText  taxi_plate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +40,28 @@ public class MainActivity extends ActionBarActivity {
             abTitle.setTextColor(textColor);
         }
 
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+        taxi_plate              = (EditText) findViewById(R.id.taxiPlate);
+        taxi_plate.setFilters(new InputFilter[]{new InputFilter.AllCaps()});
+        ImageView denunciar_img = (ImageView) findViewById(R.id.report_img1);
+        ImageView felicitar_img = (ImageView) findViewById(R.id.congrats_img2);
+        ImageView consultar_img = (ImageView) findViewById(R.id.search_img3);
+        ImageView tips_img      = (ImageView) findViewById(R.id.tips_img4);
+
+        denunciar_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PLATE   = taxi_plate.getText().toString();
+                Intent goToDenounce = new Intent(MainActivity.this, DenounceActivity.class);
+                goToDenounce.putExtra("TAXI_PLATE", PLATE);
+                Log.d("//PLATE", "--> " + PLATE);
+                startActivity(goToDenounce);
+            }
+        });
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
