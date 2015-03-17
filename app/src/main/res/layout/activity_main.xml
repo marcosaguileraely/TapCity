@@ -31,7 +31,9 @@
             android:gravity="center_vertical|center_horizontal"
             android:textSize="20dp"
             android:capitalize="characters"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:maxLength="6"
+            android:inputType="textNoSuggestions" />
 
         <LinearLayout
             android:orientation="horizontal"
@@ -45,14 +47,16 @@
                 android:layout_height="fill_parent"
                 android:id="@+id/report_img1"
                 android:layout_weight="1"
-                android:src="@drawable/denunciar" />
+                android:src="@drawable/denunciar"
+                android:clickable="true" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:id="@+id/congrats_img2"
                 android:layout_weight="1"
-                android:src="@drawable/felicitar" />
+                android:src="@drawable/felicitar"
+                android:clickable="true" />
 
         </LinearLayout>
 
@@ -68,14 +72,16 @@
                 android:layout_height="fill_parent"
                 android:id="@+id/search_img3"
                 android:layout_weight="1"
-                android:src="@drawable/reputacion" />
+                android:src="@drawable/reputacion"
+                android:clickable="true" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:id="@+id/tips_img4"
                 android:layout_weight="1"
-                android:src="@drawable/tips" />
+                android:src="@drawable/tips"
+                android:clickable="true" />
 
         </LinearLayout>
     </LinearLayout>

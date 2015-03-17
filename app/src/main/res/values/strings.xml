@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">TapCity</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_sign_up">Registro</string>
     <string name="title_activity_intro">TapCity</string>
+    <string name="title_activity_denounce">Denunciar Taxi</string>
 
 </resources>

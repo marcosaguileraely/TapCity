@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="denounces_types">
+        <item>Elija una opción</item>
+        <item>Cobro Excesivo o Ilegal</item>
+        <item>Negación del Servicio</item>
+        <item>Taximetro Alterado</item>
+        <item>Conducción Errática o Inadecuada</item>
+        <item>Lenguaje Descortés o Soez</item>
+        <item>Agresión Física o Psicológica</item>
+        <item>Paseo Millonario</item>
+        <item>Taxi Sospechoso</item>
+        <item>Conductor en Estado de Ebriedad</item>
+        <item>Mal Servicio</item>
+        <item>Acoso o Insinuación Sexual</item>
+        <item>Urto de Pertenencias</item>
+    </string-array>
+
+</resources>
