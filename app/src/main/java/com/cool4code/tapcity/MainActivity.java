@@ -1,14 +1,18 @@
 package com.cool4code.tapcity;
 
 import android.app.ActionBar;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Editable;
 import android.text.InputFilter;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,11 +20,13 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class MainActivity extends ActionBarActivity {
-    String PLATE;
+    String    PLATE;
     EditText  taxi_plate;
+    Context   context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +50,14 @@ public class MainActivity extends ActionBarActivity {
         StrictMode.setThreadPolicy(policy);
 
         taxi_plate              = (EditText) findViewById(R.id.taxiPlate);
-        taxi_plate.setFilters(new InputFilter[]{new InputFilter.AllCaps()});
+
+        //taxi_plate.setFilters(new InputFilter[]{new InputFilter.AllCaps()});
+
+        InputFilter[] filters = new InputFilter[2];
+        filters[0] = new InputFilter.LengthFilter(6); //Filter to 10 characters
+        filters[1] = new InputFilter.AllCaps();
+        taxi_plate.setFilters(filters);
+
         ImageView denunciar_img = (ImageView) findViewById(R.id.report_img1);
         ImageView felicitar_img = (ImageView) findViewById(R.id.congrats_img2);
         ImageView consultar_img = (ImageView) findViewById(R.id.search_img3);
@@ -53,15 +66,54 @@ public class MainActivity extends ActionBarActivity {
         denunciar_img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PLATE   = taxi_plate.getText().toString();
-                Intent goToDenounce = new Intent(MainActivity.this, DenounceActivity.class);
-                goToDenounce.putExtra("TAXI_PLATE", PLATE);
-                Log.d("//PLATE", "--> " + PLATE);
-                startActivity(goToDenounce);
+                String plate = taxi_plate.getText().toString();
+                Integer plateLength = plate.length();
+                Log.d("//String"," ---> "+plate+" ---> "+plateLength);
+
+                if( plateLength == 6){
+                    PLATE   = taxi_plate.getText().toString();
+                    Intent goToDenounce = new Intent(MainActivity.this, DenounceActivity.class);
+                    goToDenounce.putExtra("TAXI_PLATE", PLATE);
+                    Log.d("//PLATE", "--> " + PLATE);
+                    startActivity(goToDenounce);
+                }
+
+                if( plateLength < 6 || plateLength > 6 ){
+                    Toast.makeText(context, "Verifique la placa ingresada", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+
+        taxi_plate.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String PLATE = taxi_plate.getText().toString();
+                Integer plateLength = PLATE.length();
+                Log.d("//String"," ---> "+PLATE+" ---> "+plateLength);
+
+                if(plateLength == 6){
+                    //Toast.makeText(context, "Placa valida", Toast.LENGTH_SHORT).show();
+                    taxi_plate.getBackground().setColorFilter(Color.parseColor("#FFAA00"), PorterDuff.Mode.SRC_ATOP);
+                }
+
+                if(plateLength < 6 || plateLength > 6){
+                    //Toast.makeText(context, "Placa invalida", Toast.LENGTH_SHORT).show();
+                    taxi_plate.getBackground().setColorFilter(Color.parseColor("#CDCDCD"), PorterDuff.Mode.SRC_ATOP);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
